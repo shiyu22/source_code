@@ -155,7 +155,7 @@ def get_ground_truth(nq, topk ,idx,vct_nq):
                     no_dist[j] =  dist
                     topk_vec[j] = vet_list[num_j]
         k = k+1
-    no_dist = sorted(no_dist.items(), key=lambda x: x[1])
+    no_dist = sorted(no_dist.items(), key=lambda x: x[1], reverse=True)
 
     print(no_dist)
     fname = 'l2_results'+str(idx)+'.npy'
