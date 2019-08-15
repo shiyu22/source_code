@@ -27,7 +27,6 @@ def connect_server():
     handle_status(status=status)
     return status
 
-
 # the status of milvus
 def handle_status(status):
     if status.code != Status.SUCCESS:
