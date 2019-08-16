@@ -26,8 +26,8 @@ UINT8 = False
 # UINT8 = True
 
 # have to set the query's folder name
-NQ_FOLDER_NAME = '/home/csy/files/github/search'
-BASE_FOLDER_NAME = '/home/csy/files/github/random_data'
+NQ_FOLDER_NAME = '/data/shiyu/data'
+BASE_FOLDER_NAME = '/data/shiyu/data'
 GT_FOLDER_NAME = 'gt_all'
 RE_FOLDER_NAME = 'gt_output'
 GT_NAME = '_ground_truth.txt'
@@ -51,7 +51,6 @@ def handle_status(status):
 def load_nq_vec(nq):
     vectors = []
     filenames = os.listdir(NQ_FOLDER_NAME)  # get the whole file names
-    # filenames.sort(key=lambda x: int(x.split('.')[0][-5:]))
     filenames.sort()
     if nq == 0:
         for filename in filenames:
@@ -130,8 +129,8 @@ def get_ground_truth_l2(table_name, nq, topk ,idx,vct_nq):
                     no_dist[num_j] =  dist
         k = k+1
     no_dist = sorted(no_dist.items(), key=lambda x: x[1])
-    print("topk:",topk)
-    print("len_no_dist:",len(no_dist))
+    # print("topk:",topk)
+    # print("len_no_dist:",len(no_dist))
     save_gt_file(table_name,no_dist,idx)
 
 def get_ground_truth_ip(table_name, nq, topk ,idx,vct_nq):
@@ -157,8 +156,8 @@ def get_ground_truth_ip(table_name, nq, topk ,idx,vct_nq):
                     no_dist[num_j] =  dist
         k = k+1
     no_dist = sorted(no_dist.items(), key=lambda x: x[1], reverse=True)
-    print("topk:",topk)
-    print("len_no_dist:",len(no_dist))
+    # print("topk:",topk)
+    # print("len_no_dist:",len(no_dist))
     save_gt_file(table_name,no_dist,idx)
 
 def save_gt_file(table_name, no_dist, idx):
@@ -209,13 +208,18 @@ def ground_truth_process(table_name, nq, topk):
         vectors = load_nq_vec(nq)
         print("query list:",len(vectors))
         processes = []
-        process_num = 1
+        process_num = 8
         loops = nq // process_num
+        rest = nq % process_num
+        if rest != 0:
+            loops += 1
         time_start = time.time()
         for loop in range(loops):
             time1_start = time.time()
             base = loop * process_num
-            print('base:',base)
+            if rest!=0 and loop == loops-1:
+                process_num = rest
+            print('base:',loop)
             for i in range(process_num):
                 print('nq_index:', base+i)
                 # seed = np.random.RandomState(base+i)
@@ -232,7 +236,7 @@ def ground_truth_process(table_name, nq, topk):
             for p in processes:
                     p.join()
             time1_end = time.time()
-            print("base", base, "time_cost = ",round(time1_end - time1_start,4))
+            print("base", loop, "time_cost = ",round(time1_end - time1_start,4))
         if not os.path.exists(RE_FOLDER_NAME):
             os.mkdir(RE_FOLDER_NAME)
         get_ground_truth_txt(table_name, GT_NAME)
@@ -245,7 +249,7 @@ def main():
     try:
         opts, args = getopt.getopt(
             sys.argv[1:],
-            "hlq:k:",
+            "hlq:k:t:",
             ["help","table=","nq=","topk="],
         )
     except getopt.GetoptError:
@@ -256,7 +260,7 @@ def main():
         if opt_name in ("-h", "--help"):
             print("test.py -table <table_name> [-q <nq>] -k <topk> -l")
             sys.exit()
-        elif opt_name == "--table":
+        elif opt_name in ("-t", "--table"):
             table_name = opt_value
         elif opt_name in ("-q", "--nq"):
             nq = int(opt_value)

@@ -18,8 +18,8 @@ UINT8 = False
 # UINT8 = True
 
 # have to set the query's folder name
-NQ_FOLDER_NAME = '/home/csy/files/github/random_data/search'
-RE_FOLDER_NAME = './search_output'
+NQ_FOLDER_NAME = '/data/shiyu/data'
+RE_FOLDER_NAME = 'search_output'
 
 def connect_server():
     print("connect to milvus.")
@@ -33,7 +33,7 @@ def handle_status(status):
         print(status)
         sys.exit(2)
 
-def load_nq_vec(NQ):
+def load_nq_vec():
     filenames = os.listdir(NQ_FOLDER_NAME)
     filenames.sort()
     for filename in filenames:
@@ -46,10 +46,7 @@ def load_nq_vec(NQ):
         if UINT8==True:
             data = (data+0.5)/255
         vec_list = []
-        if NQ != 0:
-            nb = NQ
-        else:
-           nb = len(data)
+        nb = len(data)
         for i in range(nb):
             vec_list.append(data[i].tolist())
     return vec_list
@@ -74,7 +71,7 @@ def save_re_to_file(table_name, rand, results):
 def search_vec_list(table_name,nq,topk):
     rand = None
     query_list = []
-    vectors = load_nq_vec(NQ)
+    vectors = load_nq_vec()
     if nq != 0:
         try:
             rand = sorted(random.sample(range(0,NQ),nq))
@@ -105,7 +102,7 @@ def main():
     try:
         opts, args = getopt.getopt(
             sys.argv[1:],
-            "hsq:k:",
+            "hst:q:k:",
             ["help","search","table=","nq=","topk="],
         )
     except getopt.GetoptError:
@@ -116,7 +113,7 @@ def main():
         if opt_name in ("-h", "--help"):
             print("test.py -table <table_name> [-q <nq>] -k <topk> -s")
             sys.exit()
-        elif opt_name == "--table":
+        elif opt_name in ("-t", "--table"):
             table_name = opt_value
         elif opt_name in ("-q", "--nq"):
             nq = int(opt_value)
