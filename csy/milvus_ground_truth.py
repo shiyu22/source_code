@@ -209,6 +209,7 @@ def ground_truth_process(table_name, nq, topk):
         print("query list:",len(vectors))
         processes = []
         process_num = 8
+        nq = len(vectors)
         loops = nq // process_num
         rest = nq % process_num
         if rest != 0:
