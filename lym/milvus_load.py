@@ -24,7 +24,7 @@ FVECS_BASE_LEN = 100000
 SERVER_ADDR = "192.168.1.10"
 SERVER_PORT = 19530
 milvus = Milvus()
-file_index = 0
+
 
 PG_HOST = "192.168.1.10"
 PG_PORT = 5432
@@ -70,6 +70,18 @@ def load_fvecs_data(fname, base_len, idx):
     d = x[:4].view('int32')[0]
     data = x.view('float32').reshape(-1, d + 1)[begin_num:(begin_num + base_len), 1:]
     data = data.tolist()
+    # data = (data + 0.5) / 255
+    # data = normaliz_data(data)
+    return data
+
+
+def load_bvecs_data(fname, base_len, idx):
+    begin_num = base_len * idx
+    # print(fname, ": ", begin_num)
+    x = np.memmap(fname, dtype='uint8', mode='r')
+    d = x[:4].view('int32')[0]
+    data = x.reshape(-1, d + 4)[begin_num:(begin_num + base_len), 4:]
+    data = (data + 0.5) / 255
     # data = normaliz_data(data)
     return data
 
@@ -99,7 +111,7 @@ def connect_postgres_server():
 
 def create_pg_table(conn, cur):
     try:
-        sql = "CREATE TABLE " + PG_TABLE_NAME + " (ids bigint,  vecs float[]);"
+        sql = "CREATE TABLE " + PG_TABLE_NAME + " (ids bigint, location int, vecs float[]);"
         cur.execute(sql)
         conn.commit()
         print("create postgres table!")
@@ -124,9 +136,10 @@ def create_pg_vecs_table(conn, cur):
         print("can't create postgres table")
 
 
-def insert_data_to_pg(ids, vector, conn, cur):
+def insert_data_to_pg(ids, location, vector, conn, cur):
+    sql = "INSERT INTO " + PG_TABLE_NAME + " VALUES(" + str(ids) + "," + str(location) + ", array" + str(vector) + ");"
+    print(sql)
     try:
-        sql = "INSERT INTO " + PG_TABLE_NAME + " VALUES(" + str(ids) + ", array" + str(vector) + ");"
         cur.execute(sql)
         conn.commit()
         print("insert success!")
@@ -156,14 +169,13 @@ def create_pg_index(conn, cur):
         print("faild build index")
 
 
-def record_id_map(ids, table_name):
-    global file_index
+def record_id_map(ids, file_index, table_name):
+    # global file_index
     filename = './' + 'idmap/' + table_name + '_idmap.txt'
     with open(filename, 'a') as f:
         for i in range(len(ids)):
             line = str(ids[i]) + " %03d%06d\n" % (file_index, i)
             f.write(line)
-    file_index += 1
 
 
 def record_vecs_id_map(ids, count, table_name):
@@ -214,6 +226,7 @@ def main(argv):
                 create_pg_table(conn, cur)
             filenames = os.listdir(FILE_NPY_PATH)
             filenames.sort()
+            file_index = 0
             for filename in filenames:
                 print(filename)
                 vectors = load_npy_data(filename)
@@ -226,7 +239,8 @@ def main(argv):
                     i = 0
                     time_pg_strat = time.time()
                     for id in ids:
-                        insert_data_to_pg(id, vectors[i], conn, cur)
+                        location = '%03d'%file_index  + '%05d'%i
+                        insert_data_to_pg(id, location, vectors[i], conn, cur)
                         i = i + 1
                     time_pg_end = time.time()
                     print("import to pg time: ", time_pg_end - time_pg_strat)
@@ -235,7 +249,8 @@ def main(argv):
                         os.mkdir('./idmap')
                     except:
                         idmap = "True"
-                    record_id_map(ids, MILVUS_TABLE)
+                    record_id_map(ids, file_index, MILVUS_TABLE)
+                file_index = file_index + 1
             if TO_PG:
                 create_pg_index(conn, cur)
 
@@ -247,6 +262,7 @@ def main(argv):
                 create_pg_table(conn, cur)
             filenames = os.listdir(FILE_CSV_PATH)
             filenames.sort()
+            file_index = 0
             for filename in filenames:
                 print(filename)
                 vectors = load_csv_data(filename)
@@ -260,7 +276,8 @@ def main(argv):
                     i = 0
                     time_pg_start = time.time()
                     for id in ids:
-                        insert_data_to_pg(id, vectors[i], conn, cur)
+                        location = '%03d' % file_index + '%05d' % i
+                        insert_data_to_pg(id, location, vectors[i], conn, cur)
                         i = i + 1
                     time_pg_end = time.time()
                     print("import to pg time: ", time_pg_end - time_pg_start)
@@ -269,7 +286,8 @@ def main(argv):
                         os.mkdir('./idmap')
                     except:
                         idmap = "True"
-                    record_id_map(ids, MILVUS_TABLE)
+                    record_id_map(ids, file_index, MILVUS_TABLE)
+                file_index = file_index + 1
             if TO_PG:
                 create_pg_index(conn, cur)
 
