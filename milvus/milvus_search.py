@@ -10,7 +10,7 @@ MILVUS = Milvus()
 SERVER_ADDR = "192.168.1.127"
 SERVER_PORT = 19530
 
-NQ_FOLDER_NAME = 'E:/BaiduPan/data_3_nq'
+NQ_FOLDER_NAME = '/data/workspace/data/data_1'
 SE_FOLDER_NAME = 'search'
 SE_FILE_NAME = '_output.txt'
 GT_NQ = 20
@@ -65,8 +65,6 @@ def save_re_to_file(table_name, rand, results):
     f.close()
 
 
-# -s
-# search the vectors from milvus and write the results
 def search_vec_list(table_name, nq, topk):
     rand = None
     query_list = []

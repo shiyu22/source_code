@@ -11,10 +11,10 @@ from milvus import *
 
 TO_TXT = True
 TO_PG = True
-MILVUS_TABLE = 'win10_sq8'
+MILVUS_TABLE = 'milvus_sq8'
 PG_TABLE_NAME = MILVUS_TABLE
 
-FILE_NPY_PATH = 'E:/BaiduPan/data_3'
+FILE_NPY_PATH = '/data/workspace/data/data_2'
 FILE_CSV_PATH = '/data/lym/gnoimi/filecsv'
 FILE_FVECS_PATH = '/mnt/data/base.fvecs'
 
@@ -26,7 +26,7 @@ SERVER_PORT = 19530
 milvus = Milvus()
 UINT8 = True
 
-PG_HOST = "localhost"
+PG_HOST = "192.168.1.127"
 PG_PORT = 5432
 PG_USER = "postgres"
 PG_PASSWORD = "postgres"

@@ -6,15 +6,15 @@ from multiprocessing import Process
 import numpy as np
 import pandas as pd
 
-GET_VEC = False
+GET_VEC = True
 PROCESS_NUM = 5
 
 IP = False
 L2 = True
 CSV = False
 UINT8 = True
-BASE_FOLDER_NAME = 'E:/BaiduPan/data_3'
-NQ_FOLDER_NAME = 'E:/BaiduPan/data_3_nq'
+BASE_FOLDER_NAME = '/data/workspace/data/data_2'
+NQ_FOLDER_NAME = '/data/workspace/data/data_1'
 
 GT_ALL_FOLDER_NAME = 'ground_truth_all'
 GT_FOLDER_NAME = 'ground_truth'
@@ -102,7 +102,7 @@ def get_ground_truth_l2(topk, idx, vct_nq):
 
 
 def get_ground_truth_ip(topk, idx, vct_nq):
-    filenames = os.listdir(BASE_FOLDER_NAME)  # get the whole file names
+    filenames = os.listdir(BASE_FOLDER_NAME) 
     filenames.sort()
     no_dist = {}
     k = 0
