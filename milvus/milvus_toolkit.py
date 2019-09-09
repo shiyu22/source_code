@@ -19,8 +19,8 @@ PE_FILE_NAME = '_output.txt'
 IDMAP_FOLDER_NAME = 'idmap'
 IDMAP_NAME = '_idmap.txt'
 
-CSV = False
-UINT8 = True
+IS_CSV = False
+IS_UINT8 = True
 
 nq_scope = [2, 4, 6, 8, 10]
 topk_scope = [1, 10, 100]
@@ -100,12 +100,12 @@ def load_nq_vec(nq):
 
 
 def load_vec_list(file_name, num=0):
-    if CSV:
+    if IS_CSV:
         data = pd.read_csv(file_name, header=None)
         data = np.array(data)
     else:
         data = np.load(file_name)
-    if UINT8:
+    if IS_UINT8:
         data = (data + 0.5) / 255
     vec_list = []
     if num != 0:
