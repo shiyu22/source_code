@@ -102,3 +102,31 @@ python3 milvus_compare.py --table=<table_name> -f
 # -t或者--table表示需要查询的表名
 ```
 
+
+# milvus_toolkit.py说明:
+
+## 1、参数说明
+
+| 参数           | 描述                      | 默认设置                    |
+| -------------- | ------------------------- | --------------------------- |
+| SERVER_ADDR    | Milvus的IP设置            | "0.0.0.0"                   |
+| SERVER_PORT    | Milvus的端口设置          | 19530                       |
+| NL_FOLDER_NAME | 归一化向量数据的存放路径  | /data/workspace/data/data_2 |
+| NQ_FOLDER_NAME | 查询向量集的存放路径      | /data/workspace/data/data_2 |
+| IS_CSV         | 数据文件是否以csv格式存储 | False                       |
+| IS_UINT8       | 数据格式是否为uint8       | True                        |
+
+## 2、使用说明
+
+| 功能       | 说明                 | 举例                                                         |
+| ---------- | -------------------- | ------------------------------------------------------------ |
+| -c         | 在milvus中建表       | python3 milvus_toolkit.py --table=test <br />--dim=512 --index=sq8  -c |
+| --show     | 显示milvus中的表     | python3  milvus --show                                       |
+| --describe | 显示某张表的具体信息 | python3 milvus_toolkit.py --table=test <br />--describe      |
+| -d         | 删除milvus中的某张表 | python3 milvus_toolkit.py --table=test --d                   |
+| --rows     | 显示某张表的的行数   | python3 milvus_tookit.py --table=test                        |
+| --build    | 为某张表建立索引     | python3 milvus_toolkit.py --table=test --build               |
+| -n         | 判断数据是否为归一化 |                                                              |
+|            |                      |                                                              |
+
+
