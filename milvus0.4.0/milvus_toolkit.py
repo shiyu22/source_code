@@ -50,7 +50,7 @@ def connect_server():
 
 
 # -c/create the table with milvus
-def create_table(table_name, dim, index_type):
+def create_table(table_name, dim, it):
     # if index_type == 'flat':
     #     it = IndexType.FLAT
     # elif index_type == 'ivf':
