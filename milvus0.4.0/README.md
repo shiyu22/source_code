@@ -1,3 +1,96 @@
+# milvus_toolkit.py说明：
+
+### milvus_toolkit.py参数说明：
+
+| 参数            | 描述                                             | 默认设置      |
+| --------------- | ------------------------------------------------ | ------------- |
+| SERVER_ADDR     | milvus server 链接地址                           | 192.168.1.10  |
+| SERVER_PORT     | milvus server端口号                              | 19530         |
+| index_file_size | milvus建立索引时的文件大小阈值                   | 1024          |
+| metric_type     | milvus search的类型（L2 or IP）                  | MetricType.L2 |
+| nlist           | milvus search时所分的桶数量                      | 16384         |
+| NL_FOLDER_NAME  | 判断数据是否归一化时数据所在的文件夹路径         |               |
+| NQ_FOLDER_NAME  | 性能查询时，要查询的向量所在文件夹路径           |               |
+| PE_FOLDER_NAME  | 性能查询结果存储的文件夹名称                     | performance   |
+| IS_CSV          | 判断待查询向量的文件是否为csv格式(False or True) | False         |
+| IS_UINT8        | 判断待查询向量是否为uint8类型(False or True)     | False         |
+| nq_scope        | 查询时的nq值，为一个数组，可同时查询多个nq值     |               |
+| topk_scope      | 查询时的topk值，为一个数组，可同时查询多个topk值 |               |
+
+### milvus_toolkit.py使用说明：
+
+```bash
+python3 milvus_toolkit.py --table <table_name> --dim <dim_num> -c
+#执行-c,在milvus中建表，表名是table_name的值，纬度是dim_num的值
+
+python3 milvus_toolkit.py --show
+#执行--show，显示milvus中所有表的表名
+
+python3 milvus_toolkit.py --normal
+#执行--normal.判断向量是否归一化
+
+python3 milvus_toolkit.py --table <table_name> --describe
+#执行--describe,给出对指定table的描述
+
+python3 milvus_toolkit.py --table <table_name> --has
+#执行--has，判断表是否存在
+
+python3 milvus_toolkit.py --table <table_name> -d (or --delete)
+#执行-d(--delete),删除指定表
+
+python3 milvus_toolkit.py --table <table_name> --index <sq8 or flat or ivf> --build
+#执行--build,给表建立索引
+
+python3 milvus_toolkit.py --table <table_name> --drop_index
+#执行--drop_index,删除表的索引
+
+python3 milvus_toolkit.py --table <table_name> --desc_index
+#执行--desc_index,描述表的索引类型
+
+python3 milvus_toolkit.py --server_version
+#执行--server_version，给出milvus服务端的版本
+
+python3 milvus_toolkit.py --client_version
+#执行--client_version,给出milvus客户端版本
+
+python3 milvus_toolkit.py --table <table_name> --rows
+#执行--rows，给出指定表的行数
+
+python3 milvus_toolkit.py --table <table_name> --nprobe <np_num>  -s
+#执行-s，性能查询。np是指定查询时要搜索的桶的数量
+```
+
+# milvus_load.py说明：
+
+### milvus_load.py参数说明：
+
+| 参数            | 描述                                              | 默认设置     |
+| --------------- | ------------------------------------------------- | ------------ |
+| SERVER_ADDR     | milvus server 链接地址                            | 192.168.1.10 |
+| SERVER_PORT     | milvus server端口号                               | 19530        |
+| FILE_NPY_PATH   | 导入数据时的npy格式向量所在文件夹路径             |              |
+| FILE_CSV_PATH   | 导入数据时的csv格式向量所在文件夹路径             |              |
+| FILE_FVECS_PATH | 导入数据时的fvecs格式向量所在文件路径             |              |
+| FVECS_VEC_NUM   | 导入向量格式为fvecs时，将要导入milvus的向量的总数 | 100000000    |
+| FVECS_BASE_LEN  | 导入向量格式为fvecs时，每批导入的向量数量         | 100000       |
+| is_uint8        | 向量的数据是否为uint8类型(True or False)          | False        |
+| if_normaliz     | 是否对向量进行归一化处理(True or False)           | False        |
+
+### milvus_load.py使用说明：
+
+```bash
+python3 milvus_load.py --table <table_name> -n
+#执行-n，将存储格式为npy的向量导入milvvus
+
+python3 milvus_load.py --table <table_name> -c
+#执行-n，将存储格式为csv的向量导入milvvus
+
+python3 milvus_load.py --table <table_name> -f
+#执行-n，将存储格式为fvecs的向量导入milvvus
+```
+
+
+
 # milvus_ground_truth.py说明:
 
 ### milvus_ground_truth.py参数说明：
