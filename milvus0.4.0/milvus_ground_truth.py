@@ -4,7 +4,6 @@ import sys
 import time
 from multiprocessing import Process
 import numpy as np
-import pandas as pd
 
 GET_VEC = False
 PROCESS_NUM = 5
@@ -48,6 +47,7 @@ def load_nq_vec(nq):
 # load vectors from filr_name and num means nq's number
 def load_vec_list(file_name):
     if CSV:
+        import pandas as pd
         data = pd.read_csv(file_name, header=None)
         data = np.array(data)
     else:

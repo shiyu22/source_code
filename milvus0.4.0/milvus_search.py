@@ -1,5 +1,4 @@
 import sys, getopt
-import pandas as pd
 import numpy  as np
 import time
 import random
@@ -14,7 +13,7 @@ NQ_FOLDER_NAME = 'E:/BaiduPan/data_3_nq'
 SE_FOLDER_NAME = 'search'
 SE_FILE_NAME = '_output.txt'
 BASE_FOLDER_NAME = 'E:/BaiduPan/data_3'
-TOFILE = True
+TOFILE = False
 GT_NQ = 20
 CSV = False
 UINT8 = True
@@ -41,6 +40,7 @@ def load_all_vec():
     for filename in filenames:
         filename = NQ_FOLDER_NAME + '/' + filename
         if CSV:
+            import pandas as pd
             data = pd.read_csv(filename, header=None)
             data = np.array(data)
         else:
@@ -107,6 +107,7 @@ def get_file_loc_txt(table_name):
                 if line != '\n':
                     data = line.split()
                     line = data[1]
+                    print(line)
                     loca = int(line[1:4])
                     offset = int(line[4:10])
                     fnames_f.write(filenames[loca] + ' ' + str(offset + 1) + '\n')

@@ -1,7 +1,6 @@
 import getopt
 import sys
 import time
-import numpy as np
 import os
 
 UINT8 = True
