@@ -3,9 +3,7 @@ import os
 import getopt
 import sys
 import datetime
-import pandas as pd
 import numpy as np
-
 from milvus import *
 
 MILVUS = Milvus()
@@ -51,12 +49,6 @@ def connect_server():
 
 # -c/create the table with milvus
 def create_table(table_name, dim, it):
-    # if index_type == 'flat':
-    #     it = IndexType.FLAT
-    # elif index_type == 'ivf':
-    #     it = IndexType.IVFLAT
-    # elif index_type == 'sq8':
-    #     it = IndexType.IVF_SQ8
     param = {'table_name': table_name, 'dimension': dim, 'index_type': it, 'index_file_size':index_file_size, 'metric_type':metric_type}
     print("create table: ", table_name, " dimension:", dim, " index_type:", it)
     return MILVUS.create_table(param)
@@ -103,7 +95,6 @@ def load_nq_vec(nq):
         length += len(vec_list)
         if length > nq:
             num = nq % len(vec_list)
-            # vec_list = load_vec_list(NQ_FOLDER_NAME + '/' + filename, num)
             vec_list = vec_list[0:num]
         vectors += vec_list
         if len(vectors) == nq:
@@ -112,19 +103,13 @@ def load_nq_vec(nq):
 
 def load_vec_list(file_name, num=0):
     if IS_CSV:
+        import pandas as pd
         data = pd.read_csv(file_name, header=None)
         data = np.array(data)
     else:
         data = np.load(file_name)
     if IS_UINT8:
         data = (data + 0.5) / 255
-    # vec_list = []
-    # if num != 0:
-    #     for i in range(num):
-    #         vec_list.append(data[i].tolist())
-    #     return vec_list
-    # for i in range(len(data)):
-    #     vec_list.append(data[i].tolist())
     vec_list = data.tolist()
     return vec_list
 
@@ -213,7 +198,10 @@ def main():
         elif opt_name == "--build":
             connect_server()
             print(table_name," ",it)
+            time1 = time.time()
             build_table(table_name,it)
+            time2 = time.time()
+            print("total cost time: ", time2-time1)
         elif opt_name == "--drop_index":
             connect_server()
             print(MILVUS.drop_index(table_name))
