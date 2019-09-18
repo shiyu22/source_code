@@ -1,6 +1,5 @@
 import getopt
 import sys
-import psycopg2
 import time
 import numpy as np
 import os
