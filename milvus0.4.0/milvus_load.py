@@ -9,7 +9,7 @@ from milvus import *
 
 
 FILE_NPY_PATH = '/data/lym/dataset_test/npy_dataset'
-FILE_CSV_PATH = '/data/lym/gnoimi/filecsv'
+FILE_CSV_PATH = '/data/lym/dataset_test/csv_dataset'
 FILE_FVECS_PATH = '/mnt/data/base.fvecs'
 
 FVECS_VEC_NUM = 1000000000
@@ -95,7 +95,7 @@ def connect_milvus_server():
 
 
 
-def npy_to_milvus():
+def npy_to_milvus(MILVUS_TABLE):
     filenames = os.listdir(FILE_NPY_PATH)
     filenames.sort()
     file_index = 0
@@ -111,7 +111,7 @@ def npy_to_milvus():
         print(filename, " insert milvus time: ", time_add_end - time_add_start)                
         file_index = file_index + 1
 
-def csv_to_milvus():
+def csv_to_milvus(MILVUS_TABLE):
     filenames = os.listdir(FILE_CSV_PATH)
     filenames.sort()
     file_index = 0
@@ -147,10 +147,10 @@ def main(argv):
             PG_TABLE_NAME = opt_value
         elif opt_name in ("-n", "--npy"):
             connect_milvus_server()
-            npy_to_milvus()
+            npy_to_milvus(MILVUS_TABLE)
         elif opt_name in ("-c", "--csv"):
             connect_milvus_server()
-            csv_to_milvus()
+            csv_to_milvus(MILVUS_TABLE)
             
         elif opt_name in ("-f", "--fvecs"):
             connect_milvus_server()

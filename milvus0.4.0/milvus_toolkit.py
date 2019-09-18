@@ -48,9 +48,9 @@ def connect_server():
 
 
 # -c/create the table with milvus
-def create_table(table_name, dim, it):
-    param = {'table_name': table_name, 'dimension': dim, 'index_type': it, 'index_file_size':index_file_size, 'metric_type':metric_type}
-    print("create table: ", table_name, " dimension:", dim, " index_type:", it)
+def create_table(table_name, dim):
+    param = {'table_name': table_name, 'dimension': dim, 'index_file_size':index_file_size, 'metric_type':metric_type}
+    print("create table: ", table_name, " dimension:", dim)
     return MILVUS.create_table(param)
 
 
@@ -177,8 +177,7 @@ def main():
                 it = IndexType.IVF_SQ8
         elif opt_name == "-c":
             connect_server()
-            print(table_name," ",it)
-            create_table(table_name, dim, it)
+            create_table(table_name, dim)
         elif opt_name == "--show":
             connect_server()
             table_show()
