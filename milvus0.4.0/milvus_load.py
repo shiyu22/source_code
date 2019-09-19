@@ -7,6 +7,8 @@ from functools import reduce
 import numpy as np
 from milvus import *
 
+SERVER_ADDR = "192.168.1.10"
+SERVER_PORT = 19530
 
 FILE_NPY_PATH = '/data/lym/dataset_test/npy_dataset'
 FILE_CSV_PATH = '/data/lym/dataset_test/csv_dataset'
@@ -15,16 +17,13 @@ FILE_FVECS_PATH = '/mnt/data/base.fvecs'
 FVECS_VEC_NUM = 1000000000
 FVECS_BASE_LEN = 100000
 
-SERVER_ADDR = "192.168.1.10"
-SERVER_PORT = 19530
+
+
 milvus = Milvus()
 
 
-PG_HOST = "localhost"
-PG_PORT = 5432
-PG_USER = "postgres"
-PG_PASSWORD = "postgres"
-PG_DATABASE = "postgres"
+is_uint8 = False
+if_normaliz = False
 
 
 def normaliz_data(vec_list):
@@ -40,10 +39,12 @@ def normaliz_data(vec_list):
 
 def load_npy_data(filename):
     filename = FILE_NPY_PATH + "/" + filename
-    # print(filename)
-    data = np.load(filename)
+    data = np.load(filename) 
+    if is_uint8:
+        data = (data+0.5)/255
+    if if_normaliz:
+        data = normaliz_data(data)
     data = data.tolist()
-    # data = normaliz_data(data)
     return data
 
 
@@ -53,6 +54,10 @@ def load_csv_data(filename):
     # print(filename)
     data = pd.read_csv(filename, header=None)
     data = np.array(data)
+    if is_uint8:
+        data = (data+0.5)/255
+    if if_normaliz:
+        data = normaliz_data(data)
     data = data.tolist()
     # data = normaliz_data(data)
     return data

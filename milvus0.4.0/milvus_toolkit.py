@@ -10,17 +10,16 @@ MILVUS = Milvus()
 SERVER_ADDR = "192.168.1.10"
 SERVER_PORT = 19530
 
-NL_FOLDER_NAME = '/data/lcl/200_ann_test/source_data'
-NQ_FOLDER_NAME = '/data/lcl/200_ann_test/query_vecs'
-PE_FOLDER_NAME = 'performance'
-PE_FILE_NAME = '_output.csv'
-IDMAP_FOLDER_NAME = 'idmap'
-IDMAP_NAME = '_idmap.txt'
-
 
 index_file_size = 1024
 metric_type = MetricType.L2
 nlist=16384
+
+
+NL_FOLDER_NAME = '/data/lcl/200_ann_test/source_data'
+NQ_FOLDER_NAME = '/data/lcl/200_ann_test/query_vecs'
+PE_FOLDER_NAME = 'performance'
+
 
 IS_CSV = False
 IS_UINT8 = False
@@ -30,6 +29,11 @@ IS_UINT8 = False
 
 nq_scope = [1, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800]
 topk_scope = [1,1, 20, 50, 100, 300, 500, 800, 1000]
+
+
+PE_FILE_NAME = '_output.csv'
+IDMAP_FOLDER_NAME = 'idmap'
+IDMAP_NAME = '_idmap.txt'
 
 
 # the status of milvus
