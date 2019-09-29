@@ -108,7 +108,7 @@ def npy_to_milvus(MILVUS_TABLE):
         vectors = load_npy_data(filename)
         vectors_ids = []
         for i in range(len(vectors)):
-            location = '8' + '%03d'%file_index  + '%06d'%i
+            location = '8' + '%04d'%file_index  + '%06d'%i
             vectors_ids.append(int(location))
         time_add_start = time.time()
         status, ids = milvus.add_vectors(table_name=MILVUS_TABLE, records=vectors, ids=vectors_ids)
@@ -124,7 +124,7 @@ def csv_to_milvus(MILVUS_TABLE):
         vectors = load_csv_data(filename)
         vectors_ids = []
         for i in range(len(vectors)):
-            location = '8' + '%03d'%file_index  + '%06d'%i
+            location = '8' + '%04d'%file_index  + '%06d'%i
             vectors_ids.append(int(location))
         time_add_start = time.time()
         status, ids = milvus.add_vectors(table_name=MILVUS_TABLE, records=vectors, ids=vectors_ids)
