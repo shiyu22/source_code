@@ -13,6 +13,7 @@ SERVER_PORT = 19530
 FILE_NPY_PATH = '/data/lym/dataset_test/npy_dataset'
 FILE_CSV_PATH = '/data/lym/dataset_test/csv_dataset'
 FILE_FVECS_PATH = '/mnt/data/base.fvecs'
+FILE_BVECS_PATH = '/mnt/data/bigann_base.bvecs'
 
 FVECS_VEC_NUM = 1000000000
 FVECS_BASE_LEN = 100000
@@ -162,6 +163,19 @@ def main(argv):
             count = 0
             while count < (FVECS_VEC_NUM // FVECS_BASE_LEN):
                 vectors = load_fvecs_data(FILE_FVECS_PATH, FVECS_BASE_LEN, count)
+                print(count*FVECS_BASE_LEN, " ", (count+1)*FVECS_BASE_LEN)
+                vectors_ids = [id for id in range(count*FVECS_BASE_LEN,(count+1)*FVECS_BASE_LEN)]                
+                time_add_start = time.time()
+                status, ids = milvus.add_vectors(table_name=MILVUS_TABLE, records=vectors, ids=vectors_ids)
+                time_add_end = time.time()
+                print(count, " insert to milvus time: ", time_add_end - time_add_start)
+                count = count + 1
+                
+        elif opt_name in ("-b", "--bvecs"):
+            connect_milvus_server()
+            count = 0
+            while count < (FVECS_VEC_NUM // FVECS_BASE_LEN):
+                vectors = load_bvecs_data(FILE_BVECS_PATH, FVECS_BASE_LEN, count)
                 print(count*FVECS_BASE_LEN, " ", (count+1)*FVECS_BASE_LEN)
                 vectors_ids = [id for id in range(count*FVECS_BASE_LEN,(count+1)*FVECS_BASE_LEN)]                
                 time_add_start = time.time()
