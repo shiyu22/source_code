@@ -108,8 +108,8 @@ def get_file_loc_txt(table_name):
                     data = line.split()
                     line = data[1]
                     print(line)
-                    loca = int(line[1:4])
-                    offset = int(line[4:10])
+                    loca = int(line[1:5])
+                    offset = int(line[5:11])
                     fnames_f.write(filenames[loca] + ' ' + str(offset + 1) + '\n')
                 else:
                     fnames_f.write('\n')
