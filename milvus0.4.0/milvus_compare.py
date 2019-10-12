@@ -4,7 +4,7 @@ import time
 import os
 
 UINT8 = True
-GT_TOPK = 10
+GT_TOPK = 1000
 
 BASE_FOLDER_NAME = 'E:/BaiduPan/data_3'
 GT_FOLDER_NAME = 'ground_truth'
