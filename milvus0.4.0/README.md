@@ -162,7 +162,7 @@ python3 milvus_search.py --table <table_name> [-q <nq_num>] -k <topk_num> -s
 | 参数 | 描述 | 默认设置 |
 | ----------------- | ---- | -------------------- |
 | UINT8             | ground_truth向量是否为uint8格式 | TRUE                 |
-| GT_TOPK           | ground_truth中topk数值 | 22                   |
+| GT_TOPK           | ground_truth中topk数值 | 1000                   |
 | BASE_FOLDER_NAME  | 源向量数据集的路径 | '/data/milvus' |
 | GT_FOLDER_NAME    | gorund truth结果保存的路径 | 'ground_truth'       |
 | SE_FOLDER_NAME    | 查询结果保存的路径 | 'search'             |
