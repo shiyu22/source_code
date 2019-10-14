@@ -9,7 +9,7 @@ import numpy as np
 from milvus import Milvus, IndexType, Status
 
 MILVUS = Milvus()
-SERVER_ADDR = "192.168.1.127"
+SERVER_ADDR = "192.168.43.39"
 SERVER_PORT = 19530
 
 NL_FOLDER_NAME = '/data/workspace/data/data_2'
@@ -117,7 +117,7 @@ def load_vec_list(file_name, num=0):
     return vec_list
 
 
-def search_vec_list(table_name):
+def search_vec_list(table_name, num):
     random1 = datetime.datetime.now().strftime("%m%d%H%M")
     if not os.path.exists(PE_FOLDER_NAME):
         os.mkdir(PE_FOLDER_NAME)
@@ -200,9 +200,11 @@ def main():
         elif opt_name == "--rows":  # test.py --table <tablename> --rows
             connect_server()
             table_rows(table_name)
-        elif opt_name == "-s":  # test.py --table <tablename> -s
+        elif opt_name == "--num":
+            num = opt_value
+        elif opt_name == "-s":  # test.py  --num <num> --table <tablename> -s
             connect_server()
-            search_vec_list(table_name)
+            search_vec_list(table_name, num)
             sys.exit()
 
 

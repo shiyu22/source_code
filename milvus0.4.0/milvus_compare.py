@@ -3,12 +3,11 @@ import sys
 import time
 import os
 
-UINT8 = True
 GT_TOPK = 1000
 
-BASE_FOLDER_NAME = 'E:/BaiduPan/data_3'
-GT_FOLDER_NAME = 'ground_truth'
-SE_FOLDER_NAME = 'search'
+BASE_FOLDER_NAME = '/home/zilliz_support/sansuo/'
+GT_FOLDER_NAME = '/home/zilliz_support/workspace/lcl/gnd'
+SE_FOLDER_NAME = '/home/zilliz_support/workspace/lcl/search'
 SE_CM_FILE_NAME = '_file_output.txt'
 CM_FOLDER_NAME = 'compare'
 IDMAP_FOLDER_NAME = 'idmap'
@@ -23,8 +22,8 @@ CM_CSV_NAME = '_output.csv'
 CM_GET_LOC_NAME = '_loc_compare.txt'
 
 
-def load_search_out(table_name, ids=[], rand=[], distance=[]):
-    file_name = SE_FOLDER_NAME + '/' + table_name + SE_FILE_NAME
+def load_search_out(table_name, nprobe, ids=[], rand=[], distance=[]):
+    file_name = SE_FOLDER_NAME + '/' + table_name + '_' + str(nprobe) + SE_FILE_NAME
     top_k = 0
     with open(file_name, 'r') as f:
         for line in f.readlines():
@@ -49,15 +48,14 @@ def load_gt_out():
     return loc
 
 
-def save_compare_csv(nq, top_k, recalls, count_all, table_name):
-    with open(CM_FOLDER_NAME + '/' + table_name + '_' + str(nq) + "_" + str(top_k) + CM_CSV_NAME, 'w') as f:
+def save_compare_csv(nq, top_k, recalls, count_all, table_name, nprobe):
+    with open(CM_FOLDER_NAME + '/' + nprobe + '_' + table_name + '_' + str(nq) + "_" + str(top_k) + CM_CSV_NAME, 'w') as f:
         f.write('nq,topk,recall\n')
         for i in range(nq):
             line = str(i + 1) + ',' + str(top_k) + ',' + str(recalls[i] * 100) + "%"
             f.write(line + '\n')
-        f.write("avarage accuracy:" + str(round(count_all / nq / top_k, 3) * 100) + "%\n")
-        f.write("max accuracy:" + str(max(recalls) * 100) + "%\n")
-        f.write("min accuracy:" + str(min(recalls) * 100) + "%\n")
+        f.write("max, avarage, min\n")
+        f.write( str(max(recalls) * 100) + "%," + str(round(count_all / nq / top_k, 3) * 100) + "%," + str(min(recalls) * 100) + "%\n")
     print("total accuracy", round(count_all / nq / top_k, 3) * 100, "%")
 
 
@@ -78,25 +76,25 @@ def compare_correct(nq, top_k, rand, loc_gt, loc_se, topk_ground_truth):
     return recalls, count_all
 
 
-def get_recalls_loc(nq, top_k, rand, table_name, loc_se):
+def get_recalls_loc(nq, top_k, rand, table_name, loc_se, nprobe):
     loc_gt = load_gt_out()
     recalls, count_all = compare_correct(nq, top_k, rand, loc_gt, loc_se, GT_TOPK)
-    save_compare_csv(nq, top_k, recalls, count_all, table_name)
+    save_compare_csv(nq, top_k, recalls, count_all, table_name, nprobe)
 
 
-def compare_loc(table_name):
-    rand, ids, dis, nq = load_search_out(table_name)
+def compare_loc(table_name, nprobe):
+    rand, ids, dis, nq = load_search_out(table_name, nprobe)
     top_k = int(len(rand) / nq)
     print("nq:", nq, "top_k:", top_k)
-    get_recalls_loc(nq, top_k, rand, table_name, ids)
+    get_recalls_loc(nq, top_k, rand, table_name, ids, nprobe)
 
 
 def main():
     try:
         opts, args = getopt.getopt(
             sys.argv[1:],
-            "hpft:",
-            ["help", "table=", "compare", "file"]
+            "hpft:n:",
+            ["help", "table=", "nprobe=", "compare", "file"]
         )
     except getopt.GetoptError:
         print("Usage: python milvus_compare.py --table=<table_name> -p")
@@ -107,11 +105,13 @@ def main():
             sys.exit()
         elif opt_name in ("-t", "--table"):
             table_name = opt_value
-        elif opt_name in ("-p", "--compare"):  # python3 milvus_compare.py --table=<table_name> -p
+        elif opt_name in ("-n", "--nprobe"):
+            nprobe = opt_value
+        elif opt_name in ("-p", "--compare"):  # python3 milvus_compare.py --table=<table_name> -n nprobe -p
             if not os.path.exists(CM_FOLDER_NAME):
                 os.mkdir(CM_FOLDER_NAME)
-            print("compare with location.")
-            compare_loc(table_name)
+            # print("compare with location.")
+            compare_loc(table_name, nprobe)
 
 
 if __name__ == "__main__":

@@ -139,17 +139,18 @@ python3 milvus_ground_truth.py --table <table_name> [-q <nq_num>] -k <topk_num> 
 | **GT_NQ**        | **ground truth中的nq数值** | **0**          |
 | CSV              | 查询向量文件格式是否为.csv | False          |
 | UINT8            | 查询向量是否为uint8格式    | False          |
-| NPROBE           | Milvus参数nprobe           | 16             |
+| NPROBE           | Milvus参数nprobe           | 1              |
 
 ### milvus_search.py使用说明：
 
 ```bash
-python3 milvus_search.py --table <table_name> [-q <nq_num>] -k <topk_num> -s
+python3 milvus_search.py -table <tablename> [-q <nq>] -k <topk> [-n <nprobe>] -s
 
 # 执行-s实现Milvus的向量查询，并将结果写入SEARCH_FOLDER_NAME目录下的table_name_output.txt中，该文件有随机数，查询结果ids和查询结果distance三列
 # -t或者--table表示需要查询的表名
 # -q或者--nq表示在查询集中随机选取的查询向量个数，该参数可选，若没有-q表示查询向量为查询集中的全部数据
 # -k或者--topk表示查询每个向量的前k个相似的向量
+# -n或者--nprobe表示milvus参数NPROBE
 ```
 
 
@@ -180,9 +181,9 @@ python3 milvus_search.py --table <table_name> [-q <nq_num>] -k <topk_num> -s
 ### milvus_compare.py使用说明：
 
 ```bash
-python3 milvus_compare.py --table=<table_name> -p
+python3 milvus_compare.py --table=<table_name> -n nprobe -p
 
-# 执行-p或者--compare实现准确率比较，在CM_FOLDER_NAME目录下生成结果table_nq_topk_CM_CSV_NAME, table表示表名, nq/topk表示查询时的nq/topk, 该文件由三列组成，recall表示查询结果与ground truth相比较的准确率，最后显示平均准确率，准确率的最大值和最小值。
+# 执行-p或者--compare实现准确率比较，在CM_FOLDER_NAME目录下生成结果nprobe_table_nq_topk_CM_CSV_NAME, table表示表名, nq/topk表示查询时的nq/topk, 该文件由三列组成，recall表示查询结果与ground truth相比较的准确率，最后显示平均准确率，准确率的最大值和最小值。
 # -t或者--table表示需要查询的表名
-
+# -n或者--nprobe表示milvus参数NPROBE
 ```
