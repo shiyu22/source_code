@@ -70,9 +70,11 @@ def load_fvecs_data(fname, base_len, idx):
     x = np.memmap(fname, dtype='uint8', mode='r')
     d = x[:4].view('int32')[0]
     data = x.view('float32').reshape(-1, d + 1)[begin_num:(begin_num + base_len), 1:]
+    if is_uint8:
+        data = (data+0.5)/255
+    if if_normaliz:
+        data = normaliz_data(data)
     data = data.tolist()
-    # data = (data + 0.5) / 255
-    # data = normaliz_data(data)
     return data
 
 
@@ -82,8 +84,10 @@ def load_bvecs_data(fname, base_len, idx):
     x = np.memmap(fname, dtype='uint8', mode='r')
     d = x[:4].view('int32')[0]
     data = x.reshape(-1, d + 4)[begin_num:(begin_num + base_len), 4:]
-    data = (data + 0.5) / 255
-    # data = normaliz_data(data)
+    if is_uint8:
+        data = (data+0.5)/255
+    if if_normaliz:
+        data = normaliz_data(data)
     data = data.tolist()
     return data
 
