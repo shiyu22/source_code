@@ -84,6 +84,7 @@ def load_bvecs_data(fname, base_len, idx):
     data = x.reshape(-1, d + 4)[begin_num:(begin_num + base_len), 4:]
     data = (data + 0.5) / 255
     # data = normaliz_data(data)
+    data = data.tolist()
     return data
 
 
