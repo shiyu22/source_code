@@ -10,20 +10,13 @@ from milvus import *
 SERVER_ADDR = "192.168.1.58"
 SERVER_PORT = 19550
 
-FILE_UINT8_PATH = '/mnt/workspace/data/pub_0_99/can_smiles_uint8'
-FILE_HEX_PATH = '/data/workspace/apptec/1B_data/out_test/out_npy'
-# FILE_HEX_PATH = '/data/workspace/apptec/1B_data/out_1B/out_npy'
-FILE_IDS_SMILES = '/data/workspace/apptec/1B_data/out_test/test_ids_smiles.csv'
+FILE_UINT8_PATH = '/data/milvus/can_smiles_uint8'
+FILE_HEX_PATH = '/data/milvus/out_test/out_npy'
+# FILE_HEX_PATH = '/data/milvus/out_npy'
+FILE_IDS_SMILES = '/data/milvus/test_ids_smiles.csv'
 
-# FILE_SMILES = '/mnt/workspace/data/pub_0_99/can_smiles_smile'
-FILE_SMILES = '/data/workspace/apptec/1B_data/out_test/out_smiles'
-
-TO_PG = False
-PG_HOST = "192.168.1.58"
-PG_PORT = 5432
-PG_USER = "zilliz_support"
-PG_PASSWORD = "zilliz123"
-PG_DATABASE = "demo1b"
+# FILE_SMILES = '/data/milvus/can_smiles_smile'
+FILE_SMILES = '/data/milvus/out_smiles'
 
 milvus = Milvus()
 is_uint8 = False

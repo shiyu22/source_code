@@ -103,7 +103,7 @@ python3 milvus_load.py --table <table_name> -f
 | L2                 | Milvus的metric_type是否为L2      | False                |
 | CSV                | 查询向量文件格式是否为.csv       | False                |
 | UINT8              | 查询向量是否为uint8格式          | False                |
-| BASE_FOLDER_NAME   | 源向量数据集的路径               | '/data/milvus'       |
+| BASE_FOLDER_NAME   | 源向量数据集的路径               | '/data/milvus/base'  |
 | NQ_FOLDER_NAME     | 查询向量集的路径                 | '/data/milvus/query' |
 | GT_ALL_FOLDER_NAME | 执行多进程产生的中间文件         | 'ground_truth_all'   |
 | GT_FOLDER_NAME     | gorund truth结果保存的路径       | 'ground_truth'       |

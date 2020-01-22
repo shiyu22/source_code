@@ -12,8 +12,8 @@ GET_VEC = False
 CSV = False
 UINT8 = False
 
-BASE_FOLDER_NAME = '/data/shiyu/data_npy100_mols'
-NQ_FOLDER_NAME = '/data/shiyu/query_mols'
+BASE_FOLDER_NAME = '/data/milvus/base'
+NQ_FOLDER_NAME = '/data/milvus/query'
 
 GT_ALL_FOLDER_NAME = 'ground_truth_all'
 GT_FOLDER_NAME = 'ground_truth'
